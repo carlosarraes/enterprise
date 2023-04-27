@@ -33,19 +33,22 @@ namespace enterprise.Data
                 .Entity<FuncionarioTarefa>()
                 .HasOne(ft => ft.Funcionario)
                 .WithMany(f => f.FuncionarioTarefas)
-                .HasForeignKey(ft => ft.FuncionarioId);
+                .HasForeignKey(ft => ft.FuncionarioId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder
                 .Entity<FuncionarioTarefa>()
                 .HasOne(ft => ft.Tarefa)
                 .WithMany(t => t.FuncionarioTarefas)
-                .HasForeignKey(ft => ft.TarefaId);
+                .HasForeignKey(ft => ft.TarefaId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder
                 .Entity<Departamento>()
                 .HasOne(d => d.Empresa)
                 .WithMany(e => e.Departamentos)
-                .HasForeignKey(d => d.EmpresaId);
+                .HasForeignKey(d => d.EmpresaId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
