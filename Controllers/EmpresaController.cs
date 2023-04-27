@@ -1,7 +1,7 @@
-using enterprise.Data;
+using enterprise.DTO;
 using enterprise.Models;
+using enterprise.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace enterprise.Controllers
 {
@@ -9,20 +9,17 @@ namespace enterprise.Controllers
     [Route("[controller]")]
     public class EmpresaController : ControllerBase
     {
-        private readonly EnterpriseDbContext _context;
+        private readonly IEmpresaService _empresaService;
 
-        public EmpresaController(EnterpriseDbContext context)
+        public EmpresaController(IEmpresaService empresaService)
         {
-            _context = context;
+            _empresaService = empresaService;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Empresa>> Get(int id)
+        public async Task<ActionResult<EmpresaDTO>> Get(int id)
         {
-            var empresa = await _context.Empresas
-                .Include(e => e.Funcionarios)
-                .Include(e => e.Departamentos)
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var empresa = await _empresaService.GetEmpresaByIdAsync(id);
 
             if (empresa == null)
                 return NotFound();
@@ -31,16 +28,13 @@ namespace enterprise.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Empresa>> Create(Empresa empresa)
+        public async Task<ActionResult<EmpresaDTO>> Create(Empresa empresa)
         {
-            var exist = await _context.Empresas.FirstOrDefaultAsync(x => x.Cnpj == empresa.Cnpj);
-            if (exist != null)
-                return BadRequest("Empresa já cadastrada");
+            var empresaDTO = await _empresaService.CreateEmpresaAsync(empresa);
+            if (empresaDTO == null)
+                return BadRequest("Empresa já cadastrada.");
 
-            _context.Empresas.Add(empresa);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(Get), new { id = empresa.Id }, empresa);
+            return CreatedAtAction(nameof(Get), new { id = empresaDTO.Id }, empresaDTO);
         }
     }
 }
