@@ -6,4 +6,9 @@ namespace enterprise.DTO
         public string Nome { get; set; } = "";
         public string? DepartamentoNome { get; set; }
     }
+
+    public class LazyFuncionarioDTO
+    {
+        public string? Nome { get; set; }
+    }
 }
