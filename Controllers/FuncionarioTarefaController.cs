@@ -7,21 +7,21 @@ namespace enterprise.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class EmpresasController : ControllerBase
+    public class FuncionarioTarefaController : ControllerBase
     {
         private readonly EnterpriseDbContext _context;
 
-        public EmpresasController(EnterpriseDbContext context)
+        public FuncionarioTarefaController(EnterpriseDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Empresa>>> GetEmpresas()
+        public async Task<ActionResult<IEnumerable<FuncionarioTarefa>>> GetFuncionarioTarefa()
         {
-            return await _context.Empresas
-                .Include(e => e.Departamentos)
-                .Include(e => e.Funcionarios)
+            return await _context.FuncionarioTarefas
+                .Include(f => f.Funcionario)
+                .Include(t => t.Tarefa)
                 .ToListAsync();
         }
     }
