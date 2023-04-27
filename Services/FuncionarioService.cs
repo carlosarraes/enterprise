@@ -14,7 +14,7 @@ namespace enterprise.Services
             ctx = context;
         }
 
-        public async Task<FuncionarioDTO?> CreateFuncionarioAsync(Funcionario funcionario)
+        public async Task<FuncionarioDTO> CreateFuncionarioAsync(Funcionario funcionario)
         {
             ctx.Funcionarios.Add(funcionario);
             await ctx.SaveChangesAsync();

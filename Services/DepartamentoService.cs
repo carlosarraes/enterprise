@@ -31,7 +31,7 @@ namespace enterprise.Services
             };
         }
 
-        public async Task<DepartamentoDTO?> CreateDepartamentoAsync(Departamento departamento)
+        public async Task<DepartamentoDTO> CreateDepartamentoAsync(Departamento departamento)
         {
             ctx.Departamentos.Add(departamento);
             await ctx.SaveChangesAsync();
