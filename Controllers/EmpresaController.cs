@@ -20,6 +20,7 @@ namespace enterprise.Controllers
         public async Task<ActionResult<Empresa>> Get(int id)
         {
             var empresa = await _context.Empresas
+                .Include(e => e.Funcionarios)
                 .Include(e => e.Departamentos)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
