@@ -7,16 +7,16 @@ namespace enterprise.Services
 {
     public class DepartamentoService : IDepartamentoService
     {
-        private readonly EnterpriseDbContext data;
+        private readonly EnterpriseDbContext ctx;
 
         public DepartamentoService(EnterpriseDbContext context)
         {
-            data = context;
+            ctx = context;
         }
 
         public async Task<DepartamentoDTO?> GetDepartamentoByIdAsync(int id)
         {
-            var departamento = await data.Departamentos
+            var departamento = await ctx.Departamentos
                 .Include(d => d.Funcionarios)
                 .FirstOrDefaultAsync(d => d.DepartamentoId == id);
 
@@ -33,8 +33,8 @@ namespace enterprise.Services
 
         public async Task<DepartamentoDTO?> CreateDepartamentoAsync(Departamento departamento)
         {
-            data.Departamentos.Add(departamento);
-            await data.SaveChangesAsync();
+            ctx.Departamentos.Add(departamento);
+            await ctx.SaveChangesAsync();
 
             return new DepartamentoDTO
             {

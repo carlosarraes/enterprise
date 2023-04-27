@@ -7,16 +7,16 @@ namespace enterprise.Services
 {
     public class EmpresaService : IEmpresaService
     {
-        private readonly EnterpriseDbContext _context;
+        private readonly EnterpriseDbContext ctx;
 
         public EmpresaService(EnterpriseDbContext context)
         {
-            _context = context;
+            ctx = context;
         }
 
         public async Task<EmpresaDTO?> GetEmpresaByIdAsync(int id)
         {
-            var empresa = await _context.Empresas
+            var empresa = await ctx.Empresas
                 .Include(e => e.Funcionarios)
                 .ThenInclude(f => f.Departamento)
                 .Include(e => e.Departamentos)
@@ -59,12 +59,12 @@ namespace enterprise.Services
 
         public async Task<CreatedEmpresaDTO?> CreateEmpresaAsync(Empresa empresa)
         {
-            var exist = await _context.Empresas.FirstOrDefaultAsync(x => x.Cnpj == empresa.Cnpj);
+            var exist = await ctx.Empresas.FirstOrDefaultAsync(x => x.Cnpj == empresa.Cnpj);
             if (exist != null)
                 return null;
 
-            _context.Empresas.Add(empresa);
-            await _context.SaveChangesAsync();
+            ctx.Empresas.Add(empresa);
+            await ctx.SaveChangesAsync();
 
             var createdEmpresaDTO = new CreatedEmpresaDTO
             {

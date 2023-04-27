@@ -1,5 +1,6 @@
-using enterprise.Data;
+using enterprise.DTO;
 using enterprise.Models;
+using enterprise.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace enterprise.Controllers
@@ -8,28 +9,27 @@ namespace enterprise.Controllers
     [Route("[controller]")]
     public class FuncionarioController : ControllerBase
     {
-        private readonly EnterpriseDbContext _context;
+        private readonly IFuncionarioService service;
 
-        public FuncionarioController(EnterpriseDbContext context)
+        public FuncionarioController(IFuncionarioService service)
         {
-            _context = context;
+            this.service = service;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Funcionario>> Get(int id)
+        public async Task<ActionResult<FuncionarioDTO>> Get(int id)
         {
-            var funcionario = await _context.Funcionarios.FindAsync(id);
+            var funcionario = await service.GetFuncionarioByIdAsync(id);
             if (funcionario == null)
-                return NotFound();
+                return NotFound("Funcionário não encontrado");
 
             return funcionario;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Funcionario>> Post(Funcionario funcionario)
+        public async Task<ActionResult<FuncionarioDTO>> Post(Funcionario funcionario)
         {
-            _context.Funcionarios.Add(funcionario);
-            await _context.SaveChangesAsync();
+            await service.CreateFuncionarioAsync(funcionario);
 
             return CreatedAtAction(
                 nameof(Get),
