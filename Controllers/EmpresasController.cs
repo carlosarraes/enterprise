@@ -19,7 +19,10 @@ namespace enterprise.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Empresa>>> GetEmpresas()
         {
-            return await _context.Empresas.ToListAsync();
+            return await _context.Empresas
+                .Include(e => e.Departamentos)
+                .Include(e => e.Funcionarios)
+                .ToListAsync();
         }
     }
 }

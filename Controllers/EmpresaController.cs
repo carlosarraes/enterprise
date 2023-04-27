@@ -19,7 +19,10 @@ namespace enterprise.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Empresa>> Get(int id)
         {
-            var empresa = await _context.Empresas.FindAsync(id);
+            var empresa = await _context.Empresas
+                .Include(e => e.Departamentos)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
             if (empresa == null)
                 return NotFound();
 
