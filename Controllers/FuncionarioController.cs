@@ -29,12 +29,12 @@ namespace enterprise.Controllers
         [HttpPost]
         public async Task<ActionResult<FuncionarioDTO>> Post(Funcionario funcionario)
         {
-            await service.CreateFuncionarioAsync(funcionario);
+            var funcionarioDTO = await service.CreateFuncionarioAsync(funcionario);
 
             return CreatedAtAction(
                 nameof(Get),
-                new { id = funcionario.FuncionarioId },
-                funcionario
+                new { id = funcionarioDTO?.FuncionarioId },
+                funcionarioDTO
             );
         }
     }

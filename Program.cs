@@ -23,6 +23,7 @@ builder.Services
     });
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
+builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
 
 var app = builder.Build();
 
