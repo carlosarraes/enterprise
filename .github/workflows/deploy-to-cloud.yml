@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev-docsandactions
 
 jobs:
   deploy:
@@ -23,16 +24,16 @@ jobs:
           username: _json_key
           password: ${{ secrets.GCP_SA_KEY }}
 
+      - name: Create appsettings.json from secret
+        run: |
+          echo '${{ secrets.APPSETTINGS_JSON }}' > appsettings.json
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
           tags: gcr.io/refined-dogfish-353918/netent
-          build-args: |
-            DATABASE_HOST=${{ secrets.DATABASE_HOST }}
-            DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}
-            DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
