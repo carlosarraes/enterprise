@@ -29,7 +29,9 @@ namespace enterprise.Services
             ctx.Funcionarios.Add(funcionario);
             await ctx.SaveChangesAsync();
 
-            var departamento = ctx.Departamentos.FindAsync(funcionario.DepartamentoId);
+            var departamento = ctx.Departamentos
+                .Include(d => d.Funcionarios)
+                .FirstOrDefault(d => d.DepartamentoId == funcionario.DepartamentoId);
 
             return asDTO(funcionario);
         }

@@ -27,6 +27,11 @@ builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
 builder.Services.AddScoped<ITarefaService, TarefaService>();
 builder.Services.AddScoped<IFuncionarioTarefaService, FuncionarioTarefaService>();
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "5000"));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

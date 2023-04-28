@@ -29,6 +29,9 @@ namespace enterprise.Controllers
         [HttpPost]
         public async Task<ActionResult<DepartamentoDTO>> Create(Departamento departamento)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var departamentoDTO = await service.CreateDepartamentoAsync(departamento);
 
             return CreatedAtAction(
