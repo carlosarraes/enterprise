@@ -22,5 +22,16 @@ namespace enterprise.Controllers
 
             return Ok(funcionarioTarefa);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<FuncionarioTarefaDTO>> Assign(AssignDTO assign)
+        {
+            var result = await service.AssignAsync(assign.FuncionarioId, assign.TarefaId);
+
+            if (result == null)
+                return BadRequest("Invalid funcionarioId or tarefaId");
+
+            return Ok(result);
+        }
     }
 }

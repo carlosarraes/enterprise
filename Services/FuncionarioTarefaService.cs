@@ -1,5 +1,6 @@
 using enterprise.Data;
 using enterprise.DTO;
+using enterprise.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace enterprise.Services
@@ -44,6 +45,32 @@ namespace enterprise.Services
                 .ToList();
 
             return groupedByTarefa;
+        }
+
+        public async Task<FuncionarioTarefaDTO?> AssignAsync(int funcionarioId, int tarefaId)
+        {
+            var funcionario = await ctx.Funcionarios.FindAsync(funcionarioId);
+            var tarefa = await ctx.Tarefas.FindAsync(tarefaId);
+
+            if (funcionario == null || tarefa == null)
+                return null;
+
+            var funcionarioTarefa = new FuncionarioTarefa
+            {
+                FuncionarioId = funcionarioId,
+                TarefaId = tarefaId
+            };
+
+            ctx.FuncionarioTarefas.Add(funcionarioTarefa);
+            await ctx.SaveChangesAsync();
+
+            return new FuncionarioTarefaDTO
+            {
+                TarefaId = tarefaId,
+                Nome = tarefa.Nome,
+                Status = tarefa.Status,
+                FuncionarioNomes = new List<string> { funcionario.Nome }
+            };
         }
     }
 }
