@@ -15,6 +15,7 @@ namespace enterprise.Services
         }
 
         public async Task<TarefaDTO?> GetTarefaByIdAsync(int id)
+        private TarefaDTO asDTO(Tarefa tarefa)
         {
             var tarefa = await ctx.Tarefas
                 .Include(t => t.FuncionarioTarefas)
@@ -36,6 +37,19 @@ namespace enterprise.Services
             };
 
             return tarefaDTO;
+        }
+
+        public async Task<TarefaDTO?> GetTarefaByIdAsync(int id)
+        {
+            var tarefa = await ctx.Tarefas
+                .Include(t => t.FuncionarioTarefas)
+                .ThenInclude(ft => ft.Funcionario)
+                .FirstOrDefaultAsync(t => t.TarefaId == id);
+
+            if (tarefa == null)
+                return null;
+
+            return asDTO(tarefa);
         }
 
         public async Task<TarefaDTO> CreateTarefaAsync(Tarefa tarefa)

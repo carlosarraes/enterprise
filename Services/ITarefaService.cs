@@ -7,5 +7,6 @@ namespace enterprise.Services
     {
         Task<TarefaDTO?> GetTarefaByIdAsync(int id);
         Task<TarefaDTO> CreateTarefaAsync(Tarefa tarefa);
+        Task<TarefaDTO?> DoneAsync(int id);
     }
 }
