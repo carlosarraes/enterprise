@@ -4,9 +4,11 @@ Esse CRUD foi construída com .NET e Entity Framework, fornecendo uma plataforma
 
 A aplicação foi criada como imagem Docker e implantada no Google Cloud Run.
 
-[Link Swagger](https://netent-4wgfen3n5q-rj.a.run.app/swagger/index.html)
+App: [Swagger](https://netent-4wgfen3n5q-rj.a.run.app/swagger/index.html)
 
-## GET /empresa/{id}
+## Endpoints
+
+### `GET /empresa/{id}`
 
 Retorna uma lista completa sobre a empresa (nome, cnpj, funcionários [lista], departamento [lista])
 
@@ -47,7 +49,7 @@ Retorna uma lista completa sobre a empresa (nome, cnpj, funcionários [lista], d
 </tbody>
 </table>
 
-## POST /empresa/
+### `POST /empresa/`
 
 Cria uma empresa
 
@@ -85,7 +87,7 @@ Cria uma empresa
 </tbody>
 </table>
 
-## GET /departamento/{id}
+### `GET /departamento/{id}`
 
 Retorna informações do departamento (id, nome e quantidade de funcionários)
 
@@ -112,7 +114,7 @@ Retorna informações do departamento (id, nome e quantidade de funcionários)
 </tbody>
 </table>
 
-## POST /departamento/
+### `POST /departamento/`
 
 Cria um departamento e o atribui a uma empresa
 
@@ -150,7 +152,7 @@ Cria um departamento e o atribui a uma empresa
 </tbody>
 </table>
 
-## GET /funcionario/{id}
+### `GET /funcionario/{id}`
 
 Retorna dados de um funcionário, (id, nome, departamento)
 
@@ -177,7 +179,7 @@ Retorna dados de um funcionário, (id, nome, departamento)
 </tbody>
 </table>
 
-## POST /funcionario/
+### `POST /funcionario/`
 
 Cria um funcionário e o atribui a um departamento
 
@@ -216,7 +218,7 @@ Cria um funcionário e o atribui a um departamento
 </tbody>
 </table>
 
-## GET /tarefa/{id}
+### `GET /tarefa/{id}`
 
 Retorna informações da tarefa (tarefaid, nome, descrição, status, funcionários (nomes))
 
@@ -249,7 +251,7 @@ Retorna informações da tarefa (tarefaid, nome, descrição, status, funcionár
 </tbody>
 </table>
 
-## POST /tarefa/
+### `POST /tarefa/`
 
 Cria uma tarefa
 
@@ -294,7 +296,7 @@ Cria uma tarefa
 </tbody>
 </table>
 
-## PATCH /tarefa/{id}
+### `PATCH /tarefa/{id}`
 
 Altera o status de uma Tarefa para verdadeiro
 
@@ -327,7 +329,7 @@ Altera o status de uma Tarefa para verdadeiro
 </tbody>
 </table>
 
-## GET /funcionariotarefa
+### `GET /funcionariotarefa`
 
 Retorna todas as tarefas com as pessoas que estão nessa tarefa - Lista com tarefaId, nome da tarefa, status, funcionários (lista)
 
@@ -357,7 +359,7 @@ Retorna todas as tarefas com as pessoas que estão nessa tarefa - Lista com tare
 </tbody>
 </table>
 
-## POST /funcionariotarefa
+### `POST /funcionariotarefa`
 
 Atribua uma tarefa a um funcionário
 
