@@ -14,17 +14,8 @@ namespace enterprise.Services
             ctx = context;
         }
 
-        public async Task<TarefaDTO?> GetTarefaByIdAsync(int id)
         private TarefaDTO asDTO(Tarefa tarefa)
         {
-            var tarefa = await ctx.Tarefas
-                .Include(t => t.FuncionarioTarefas)
-                .ThenInclude(ft => ft.Funcionario)
-                .FirstOrDefaultAsync(t => t.TarefaId == id);
-
-            if (tarefa == null)
-                return null;
-
             var tarefaDTO = new TarefaDTO
             {
                 TarefaId = tarefa.TarefaId,
@@ -57,15 +48,22 @@ namespace enterprise.Services
             ctx.Tarefas.Add(tarefa);
             await ctx.SaveChangesAsync();
 
-            var tarefaDTO = new TarefaDTO
-            {
-                TarefaId = tarefa.TarefaId,
-                Descricao = tarefa.Descricao,
-                Nome = tarefa.Nome,
-                Status = tarefa.Status,
-            };
+            return asDTO(tarefa);
+        }
 
-            return tarefaDTO;
+        public async Task<TarefaDTO?> DoneAsync(int id)
+        {
+            var tarefa = await ctx.Tarefas
+                .Include(t => t.FuncionarioTarefas)
+                .ThenInclude(ft => ft.Funcionario)
+                .FirstOrDefaultAsync(t => t.TarefaId == id);
+            if (tarefa == null)
+                return null;
+
+            tarefa.Status = true;
+            await ctx.SaveChangesAsync();
+
+            return asDTO(tarefa);
         }
     }
 }

@@ -14,6 +14,16 @@ namespace enterprise.Services
             ctx = context;
         }
 
+        private DepartamentoDTO asDTO(Departamento departamento)
+        {
+            return new DepartamentoDTO
+            {
+                DepartamentoId = departamento.DepartamentoId,
+                Nome = departamento.Nome,
+                FuncionarioCount = departamento.Funcionarios.Count
+            };
+        }
+
         public async Task<DepartamentoDTO?> GetDepartamentoByIdAsync(int id)
         {
             var departamento = await ctx.Departamentos
@@ -23,12 +33,7 @@ namespace enterprise.Services
             if (departamento == null)
                 return null;
 
-            return new DepartamentoDTO
-            {
-                DepartamentoId = departamento.DepartamentoId,
-                Nome = departamento.Nome,
-                FuncionarioCount = departamento.Funcionarios.Count
-            };
+            return asDTO(departamento);
         }
 
         public async Task<DepartamentoDTO> CreateDepartamentoAsync(Departamento departamento)
@@ -36,12 +41,7 @@ namespace enterprise.Services
             ctx.Departamentos.Add(departamento);
             await ctx.SaveChangesAsync();
 
-            return new DepartamentoDTO
-            {
-                DepartamentoId = departamento.DepartamentoId,
-                Nome = departamento.Nome,
-                FuncionarioCount = departamento.Funcionarios.Count
-            };
+            return asDTO(departamento);
         }
     }
 }

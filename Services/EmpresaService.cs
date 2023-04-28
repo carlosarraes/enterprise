@@ -14,18 +14,9 @@ namespace enterprise.Services
             ctx = context;
         }
 
-        public async Task<EmpresaDTO?> GetEmpresaByIdAsync(int id)
+        private static EmpresaDTO asDTO(Empresa empresa)
         {
-            var empresa = await ctx.Empresas
-                .Include(e => e.Funcionarios)
-                .ThenInclude(f => f.Departamento)
-                .Include(e => e.Departamentos)
-                .FirstOrDefaultAsync(e => e.Id == id);
-
-            if (empresa == null)
-                return null;
-
-            var empresaDTO = new EmpresaDTO
+            return new EmpresaDTO
             {
                 Id = empresa.Id,
                 Nome = empresa.Nome,
@@ -53,8 +44,20 @@ namespace enterprise.Services
                     )
                     .ToList()
             };
+        }
 
-            return empresaDTO;
+        public async Task<EmpresaDTO?> GetEmpresaByIdAsync(int id)
+        {
+            var empresa = await ctx.Empresas
+                .Include(e => e.Funcionarios)
+                .ThenInclude(f => f.Departamento)
+                .Include(e => e.Departamentos)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (empresa == null)
+                return null;
+
+            return asDTO(empresa);
         }
 
         public async Task<CreatedEmpresaDTO?> CreateEmpresaAsync(Empresa empresa)

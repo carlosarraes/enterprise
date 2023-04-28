@@ -14,6 +14,16 @@ namespace enterprise.Services
             ctx = context;
         }
 
+        private FuncionarioDTO asDTO(Funcionario funcionario)
+        {
+            return new FuncionarioDTO()
+            {
+                FuncionarioId = funcionario.FuncionarioId,
+                Nome = funcionario.Nome,
+                DepartamentoNome = funcionario.Departamento?.Nome,
+            };
+        }
+
         public async Task<FuncionarioDTO> CreateFuncionarioAsync(Funcionario funcionario)
         {
             ctx.Funcionarios.Add(funcionario);
@@ -21,14 +31,7 @@ namespace enterprise.Services
 
             var departamento = ctx.Departamentos.FindAsync(funcionario.DepartamentoId);
 
-            var funcionarioDTO = new FuncionarioDTO()
-            {
-                FuncionarioId = funcionario.FuncionarioId,
-                Nome = funcionario.Nome,
-                DepartamentoNome = departamento.Result?.Nome,
-            };
-
-            return funcionarioDTO;
+            return asDTO(funcionario);
         }
 
         public async Task<FuncionarioDTO?> GetFuncionarioByIdAsync(int id)
@@ -39,14 +42,7 @@ namespace enterprise.Services
             if (funcionario == null)
                 return null;
 
-            var funcionarioDTO = new FuncionarioDTO()
-            {
-                FuncionarioId = funcionario.FuncionarioId,
-                Nome = funcionario.Nome,
-                DepartamentoNome = funcionario.Departamento?.Nome,
-            };
-
-            return funcionarioDTO;
+            return asDTO(funcionario);
         }
     }
 }
