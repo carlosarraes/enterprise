@@ -1,5 +1,6 @@
-using enterprise.Data;
+using enterprise.DTO;
 using enterprise.Models;
+using enterprise.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace enterprise.Controllers
@@ -8,53 +9,39 @@ namespace enterprise.Controllers
     [Route("[controller]")]
     public class TarefaController : ControllerBase
     {
-        private readonly EnterpriseDbContext _context;
+        private readonly ITarefaService service;
 
-        public TarefaController(EnterpriseDbContext context)
+        public TarefaController(ITarefaService service)
         {
-            _context = context;
+            this.service = service;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tarefa>> Get(int id)
+        public async Task<ActionResult<TarefaDTO>> Get(int id)
         {
-            var tarefa = await _context.Tarefas.FindAsync(id);
+            var tarefa = await service.GetTarefaByIdAsync(id);
             if (tarefa == null)
-                return NotFound();
+                return NotFound("Tarefa não encontrada");
 
             return tarefa;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Tarefa>> Post(Tarefa tarefa)
+        public async Task<ActionResult<TarefaDTO>> Post(Tarefa tarefa)
         {
-            _context.Tarefas.Add(tarefa);
-            await _context.SaveChangesAsync();
+            var tarefaDTO = await service.CreateTarefaAsync(tarefa);
 
-            return CreatedAtAction(nameof(Get), new { id = tarefa.TarefaId }, tarefa);
+            return CreatedAtAction(nameof(Get), new { id = tarefaDTO.TarefaId }, tarefaDTO);
         }
 
-        [HttpPost("{tarefaId}/{funcionarioId}")]
-        public async Task<ActionResult<FuncionarioTarefa>> Post(int tarefaId, int funcionarioId)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<TarefaDTO?>> Patch(int id)
         {
-            var tarefa = await _context.Tarefas.FindAsync(tarefaId);
+            var tarefa = await service.DoneAsync(id);
             if (tarefa == null)
-                return NotFound();
+                return NotFound("Tarefa não encontrada");
 
-            var funcionario = await _context.Funcionarios.FindAsync(funcionarioId);
-            if (funcionario == null)
-                return NotFound();
-
-            var funcionarioTarefa = new FuncionarioTarefa
-            {
-                FuncionarioId = funcionarioId,
-                TarefaId = tarefaId
-            };
-
-            _context.FuncionarioTarefas.Add(funcionarioTarefa);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(Get), new { id = tarefa.TarefaId }, funcionarioTarefa);
+            return tarefa;
         }
     }
 }

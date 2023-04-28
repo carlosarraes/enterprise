@@ -1,5 +1,6 @@
-using enterprise.Data;
+using enterprise.DTO;
 using enterprise.Models;
+using enterprise.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace enterprise.Controllers
@@ -8,33 +9,32 @@ namespace enterprise.Controllers
     [Route("[controller]")]
     public class DepartamentoController : ControllerBase
     {
-        private readonly EnterpriseDbContext _context;
+        private readonly IDepartamentoService service;
 
-        public DepartamentoController(EnterpriseDbContext context)
+        public DepartamentoController(IDepartamentoService service)
         {
-            _context = context;
+            this.service = service;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Departamento>> Get(int id)
+        public async Task<ActionResult<DepartamentoDTO>> Get(int id)
         {
-            var departamento = await _context.Departamentos.FindAsync(id);
+            var departamento = await service.GetDepartamentoByIdAsync(id);
             if (departamento == null)
-                return NotFound();
+                return NotFound("Departamento não encontrado");
 
             return departamento;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Departamento>> Create(Departamento departamento)
+        public async Task<ActionResult<DepartamentoDTO>> Create(Departamento departamento)
         {
-            _context.Departamentos.Add(departamento);
-            await _context.SaveChangesAsync();
+            var departamentoDTO = await service.CreateDepartamentoAsync(departamento);
 
             return CreatedAtAction(
                 nameof(Get),
-                new { id = departamento.DepartamentoId },
-                departamento
+                new { id = departamentoDTO?.DepartamentoId },
+                departamentoDTO
             );
         }
     }

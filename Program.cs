@@ -1,11 +1,11 @@
 using System.Text.Json.Serialization;
 using enterprise.Data;
+using enterprise.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,6 +21,11 @@ builder.Services
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
+builder.Services.AddScoped<IEmpresaService, EmpresaService>();
+builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
+builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
+builder.Services.AddScoped<ITarefaService, TarefaService>();
+builder.Services.AddScoped<IFuncionarioTarefaService, FuncionarioTarefaService>();
 
 var app = builder.Build();
 
