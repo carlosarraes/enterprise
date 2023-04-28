@@ -26,6 +26,9 @@ namespace enterprise.Controllers
         [HttpPost]
         public async Task<ActionResult<FuncionarioTarefaDTO>> Assign(AssignDTO assign)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var result = await service.AssignAsync(assign.FuncionarioId, assign.TarefaId);
 
             if (result == null)

@@ -29,6 +29,9 @@ namespace enterprise.Controllers
         [HttpPost]
         public async Task<ActionResult<FuncionarioDTO>> Post(Funcionario funcionario)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var funcionarioDTO = await service.CreateFuncionarioAsync(funcionario);
 
             return CreatedAtAction(

@@ -29,6 +29,8 @@ namespace enterprise.Controllers
         [HttpPost]
         public async Task<ActionResult<EmpresaDTO>> Create(Empresa empresa)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var empresaDTO = await service.CreateEmpresaAsync(empresa);
             if (empresaDTO == null)

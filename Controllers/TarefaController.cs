@@ -29,6 +29,9 @@ namespace enterprise.Controllers
         [HttpPost]
         public async Task<ActionResult<TarefaDTO>> Post(Tarefa tarefa)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var tarefaDTO = await service.CreateTarefaAsync(tarefa);
 
             return CreatedAtAction(nameof(Get), new { id = tarefaDTO.TarefaId }, tarefaDTO);
