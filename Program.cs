@@ -25,6 +25,7 @@ builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
 builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
 builder.Services.AddScoped<ITarefaService, TarefaService>();
+builder.Services.AddScoped<IFuncionarioTarefaService, FuncionarioTarefaService>();
 
 var app = builder.Build();
 
