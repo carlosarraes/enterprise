@@ -9,20 +9,19 @@ namespace enterprise.Controllers
     [Route("[controller]")]
     public class EmpresaController : ControllerBase
     {
-        private readonly IEmpresaService _empresaService;
+        private readonly IEmpresaService service;
 
-        public EmpresaController(IEmpresaService empresaService)
+        public EmpresaController(IEmpresaService service)
         {
-            _empresaService = empresaService;
+            this.service = service;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<EmpresaDTO>> Get(int id)
         {
-            var empresa = await _empresaService.GetEmpresaByIdAsync(id);
-
+            var empresa = await service.GetEmpresaByIdAsync(id);
             if (empresa == null)
-                return NotFound();
+                return NotFound("Empresa não encontrada.");
 
             return empresa;
         }
@@ -30,7 +29,8 @@ namespace enterprise.Controllers
         [HttpPost]
         public async Task<ActionResult<EmpresaDTO>> Create(Empresa empresa)
         {
-            var empresaDTO = await _empresaService.CreateEmpresaAsync(empresa);
+
+            var empresaDTO = await service.CreateEmpresaAsync(empresa);
             if (empresaDTO == null)
                 return BadRequest("Empresa já cadastrada.");
 
